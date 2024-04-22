@@ -68,7 +68,6 @@ const App = () => {
   };
 
   const handleFeedback = (type) => {
-    console.log(type, "type", goodFeedback);
     switch (type) {
       case Feedback.GOOD:
         return setGoodFeedback(goodFeedback + 1);
