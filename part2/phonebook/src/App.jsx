@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
-import axios from "axios";
+import actions from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -22,18 +22,39 @@ const App = () => {
     }
   };
 
-  const handleNameError = () => {
-    alert(`${newName} is already added to phonebook`);
+  const confirmPersonUpdate = (name) => {
+    return confirm(
+      `${name} is already added to phonebook. Replace the old number with a new one?`
+    );
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     try {
       nameValidation(newName);
-      setPersons([...persons, { name: newName, number: newNumber }]);
+      actions
+        .createPerson({ name: newName, number: newNumber })
+        .then((newPerson) => setPersons([...persons, newPerson]));
       reset();
     } catch (e) {
-      handleNameError();
+      const isConfirmed = confirmPersonUpdate(newName);
+      const personId = persons.find((person) => person.name === newName)?.id;
+
+      isConfirmed
+        ? actions
+            .updatePerson(personId, {
+              name: newName,
+              number: newNumber,
+            })
+            .then((updatedPerson) => {
+              setPersons(
+                persons.map((person) =>
+                  person.id === personId ? updatedPerson : person
+                )
+              );
+            })
+        : null;
+      reset();
     }
   };
 
@@ -52,14 +73,25 @@ const App = () => {
     setFilterInput(filterInput);
   };
 
-  const filterPersons = persons.filter((person) =>
-    person.name.toLowerCase().includes(filterInput.toLowerCase())
-  );
+  // const filterPersons = persons.filter((person) =>
+  //   person.name.toLowerCase().includes(filterInput.toLowerCase())
+  // );
+
+  const handleDeletion = (id) => {
+    const person = persons.find((person) => person.id === id);
+    const isConfirmed = confirm(`Delete ${person.name}?`);
+
+    isConfirmed
+      ? actions.deletePerson(id).then((deletedPerson) => {
+          setPersons(
+            persons.filter((person) => person.id !== deletedPerson.id)
+          );
+        })
+      : null;
+  };
 
   const dataHandler = () => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setPersons(response.data);
-    });
+    actions.getPersons().then((persons) => setPersons(persons));
   };
 
   useEffect(dataHandler, []);
@@ -77,7 +109,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={filterPersons} />
+      <Persons persons={persons} handleDeletion={handleDeletion} />
     </div>
   );
 };
