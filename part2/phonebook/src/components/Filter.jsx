@@ -1,7 +1,7 @@
 const Filter = ({ handleFilterInput, filterInput }) => {
   return (
     <form>
-      <label for="filterPhonebook">filter shown with</label>
+      <label htmlFor="filterPhonebook">filter shown with</label>
       <input
         id="filterPhonebook"
         value={filterInput}
