@@ -1,24 +1,9 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
-      "name": "chalupa",
-      "number": "333",
-      "id": "53fe"
-    },
-    {
       "name": "Minty",
       "number": "333",
       "id": "d363"
-    },
-    {
-      "id": "ad84",
-      "name": "minty",
-      "number": "123"
     }
   ]
 }
