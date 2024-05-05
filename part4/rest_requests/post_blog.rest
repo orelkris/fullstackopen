@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title" : "Minty is da Boss",
+  "author" : "Chorizus",
+  "url" : "www.chorizustruth.com",
+  "likes" : 5
+}
