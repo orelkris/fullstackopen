@@ -1,10 +1,4 @@
-const {
-  groupBy,
-  orderBy,
-  flattenDeep,
-  reduce,
-  flatMapDeep,
-} = require("lodash");
+const { groupBy, orderBy } = require("lodash");
 
 const blogs = [
   {
